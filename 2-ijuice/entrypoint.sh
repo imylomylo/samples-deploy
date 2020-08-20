@@ -11,6 +11,6 @@ server=1
 daemon=1' > /root/.komodo/IJUICE/IJUICE.conf
 
 echo "Starting screen"
-/usr/bin/screen -dmS blockchain bash -c 'cd /root/start-ijuice.sh; exec bash'
+/usr/bin/screen -dmS blockchain bash -c 'cd /root;./start-ijuice.sh; exec bash'
 
 /bin/bash
