@@ -2,6 +2,8 @@ version: "3.6"
 
 services:
   ijuice:
+    stdin_open: true
+    tty: true
     build: .
     ports:
       - "24707"
