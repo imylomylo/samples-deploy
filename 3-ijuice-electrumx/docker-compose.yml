@@ -8,3 +8,11 @@ services:
     ports:
       - "24707"
       - "127.0.0.1:24708:24708"
+  electrumx:
+    image: lukechilds/electrumx:v1.15.0
+    ports:
+      - "50001"
+      - "50002"
+    environment:
+        COIN: "Komodo"
+        DAEMON_URL: "http://changeuser:changepassword@ijuice:24708"
