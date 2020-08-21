@@ -3,7 +3,7 @@ allow_mixing
 
 node ChainServices {
   node smartchain
-  storage dataconfig #red {
+  storage dataconfig #pink {
     card walletfullnode
     card debuglog
     folder blocks
@@ -29,7 +29,7 @@ node ChainServices {
 
 
   node sql {
-    storage persisted #red {
+    storage persisted #pink {
       database privatedata
     }
   }
@@ -50,6 +50,11 @@ cloud p2p {
 smartchain *-- dataconfig
 smartchain *-- zcashparams
 electrumx --> smartchain : rpcport
+card blah
+note right of electrumx #pink
+  Need IP address & rpc credentials of smartchain container as envariables in docker-compose file
+  The rpc credentials also need to be passed into the pymiddleware
+end note
 litewallet1 --> electrumx
 litewallet2 --> electrumx
 litewalletn --> electrumx
