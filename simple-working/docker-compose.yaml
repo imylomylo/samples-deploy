@@ -1,0 +1,65 @@
+version: "3.7"
+
+services:
+  ijuice-komodo-node:
+    build:
+      context: ./ijuice-komodo-node
+      args:
+        - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
+    image: ijuice-komodo-node:test
+    environment:
+      - AC_CC=2
+      - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
+      - AC_REWARD=10000
+      - AC_SUPPLY=1000
+      - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
+      - JUICYCHAIN_TEST_NODE=144.76.148.154
+    entrypoint:
+      - "bash"
+      - "-c"
+      - |
+        /opt/komodo/komodo/src/komodod \
+        -ac_cc=$${AC_CC} \
+        -ac_name=${AC_NAME} \
+        -ac_pubkey=$${AC_PUBKEY} \
+        -ac_reward=$${AC_REWARD} \
+        -ac_supply=$${AC_SUPPLY} \
+        -addnode=$${JUICYCHAIN_TEST_NODE} \
+        -datadir=$${IJUICE_DATA_PATH} \
+        -rpcallowip=${DOCKER_KOMODO_NETWORK_SUBNET} \
+        -rpcallowip=127.0.0.1 \
+        -rpcbind=0.0.0.0 \
+        -rpcpassword=${IJUICE_KOMODO_NODE_PASSWORD} \
+        -rpcport=24708 \
+        -rpcuser=${IJUICE_KOMODO_NODE_USERNAME} \
+        -server=1\
+        -timeout=18000 \
+        -txindex=1
+    ports:
+      - "24707:24707"
+      - "24708:24708"
+    networks:
+      komodo:
+          ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
+    volumes:
+      - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+  electrumx:
+    depends_on:
+      - ijuice-komodo-node
+    image: lukechilds/electrumx:v1.15.0
+    ports:
+      - "50001:50001"
+      - "50002:50002"
+    environment:
+      - LOG_LEVEL=debug
+      - COIN=Komodo
+      - DAEMON_URL=http://${IJUICE_KOMODO_NODE_USERNAME}:${IJUICE_KOMODO_NODE_PASSWORD}@${IJUICE_KOMODO_NODE_IPV4_ADDR}:24708
+    networks:
+      komodo:
+          ipv4_address: ${ELECTRUMX_IPV4_ADDR}
+networks:
+  komodo:
+    ipam:
+      driver: default
+      config:
+        - subnet: ${DOCKER_KOMODO_NETWORK_SUBNET}
