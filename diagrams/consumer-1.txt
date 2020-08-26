@@ -1,0 +1,11 @@
+@startuml
+autonumber
+Consumer -> ConsumerWeb : Browse Request
+Consumer <- ConsumerWeb : Server Response "Track Your Juice"
+Consumer -> ConsumerRestAPI : POST BBDJDSJDE
+ConsumerRestAPI -> DB : Get Batch Number Details
+ConsumerRestAPI -> Explorer : GET Batch Wallet Tx
+ConsumerRestAPI <- Explorer : Response Transactions
+ConsumerRestAPI -> DB : Find Artifacts By Sender Addresses
+Consumer <- ConsumerRestAPI : Return Artifacts As "Product Journey" Data
+@enduml
