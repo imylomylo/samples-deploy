@@ -1,3 +1,6 @@
 [submodule "simple-working/import-api"]
 	path = simple-working/import-api
 	url = https://github.com/The-New-Fork/import-api.git
+[submodule "simple-working/customer-smartchain-nodes-blocknotify"]
+	path = simple-working/customer-smartchain-nodes-blocknotify
+	url = https://github.com/The-New-Fork/customer-smartchain-nodes-blocknotify.git
