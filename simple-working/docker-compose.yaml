@@ -34,7 +34,9 @@ services:
         -rpcuser=${IJUICE_KOMODO_NODE_USERNAME} \
         -server=1\
         -timeout=18000 \
-        -txindex=1
+        -txindex=1 \
+        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/jobs.sh %s" \
+        -pubkey=02db69eaad486fb69ac905a771e40b97dcfecbae0a0cc040616fe81a3a05827564
     ports:
       - "24707:24707"
       - "24708:24708"
