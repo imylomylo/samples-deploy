@@ -45,6 +45,52 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+  import-api:
+    build:
+      context: ./import-api
+      args:
+        ENV: dev
+    command: python manage.py runserver 0.0.0.0:8777
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./import-api/src/:/app
+    ports:
+      - "8777:8777"
+    links:
+      - db:db
+    depends_on:
+      - db
+      - migrate
+    networks:
+      komodo:
+          ipv4_address: ${IMPORT_API_IPV4_ADDR}
+  migrate:
+    image: simple-working_import-api
+    command: python manage.py migrate --noinput
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./src/:/code
+    links:
+      - db:db
+    depends_on:
+      - db
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      komodo:
+        ipv4_address: ${POSTGRES_IPV4_ADDR}
 networks:
   komodo:
     ipam:
