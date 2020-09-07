@@ -45,20 +45,6 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
-  electrumx:
-    depends_on:
-      - ijuice-komodo-node
-    image: lukechilds/electrumx:v1.15.0
-    ports:
-      - "50001:50001"
-      - "50002:50002"
-    environment:
-      - LOG_LEVEL=debug
-      - COIN=Komodo
-      - DAEMON_URL=http://${IJUICE_KOMODO_NODE_USERNAME}:${IJUICE_KOMODO_NODE_PASSWORD}@${IJUICE_KOMODO_NODE_IPV4_ADDR}:24708
-    networks:
-      komodo:
-          ipv4_address: ${ELECTRUMX_IPV4_ADDR}
 networks:
   komodo:
     ipam:
