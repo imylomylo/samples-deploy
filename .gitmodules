@@ -4,3 +4,6 @@
 [submodule "simple-working/customer-smartchain-nodes-blocknotify"]
 	path = simple-working/customer-smartchain-nodes-blocknotify
 	url = https://github.com/The-New-Fork/customer-smartchain-nodes-blocknotify.git
+[submodule "simple-working/juicychain-api"]
+	path = simple-working/juicychain-api
+	url = https://github.com/The-New-Fork/juicychain-api.git
