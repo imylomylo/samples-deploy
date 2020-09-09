@@ -14,6 +14,15 @@ services:
       - AC_SUPPLY=1000
       - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
       - JUICYCHAIN_TEST_NODE=144.76.148.154
+      - IMPORT_API_IP=${IMPORT_API_IPV4_ADDR}
+      - IMPORT_API_PORT=${IMPORT_API_PORT}
+      - THIS_NODE_WALLET=${THIS_NODE_WALLET}
+      - BLOCKNOTIFY_DIR=${BLOCKNOTIFY_DIR}
+      - BLOCKNOTIFY_CHAINSYNC_LIMIT=${BLOCKNOTIFY_CHAINSYNC_LIMIT}
+      - HOUSEKEEPING_ADDRESS=${HOUSEKEEPING_ADDRESS}
+      - DEV_IMPORT_API_INTEGRITY_PATH=${DEV_IMPORT_API_INTEGRITY_PATH}
+      - DEV_IMPORT_API_BATCH_PATH=${DEV_IMPORT_API_BATCH_PATH}
+      - DEV_IMPORT_API_BATCH_REQUIRE_INTEGRITY_PATH=${DEV_IMPORT_API_BATCH_REQUIRE_INTEGRITY_PATH}
     entrypoint:
       - "bash"
       - "-c"
@@ -53,6 +62,7 @@ services:
         ENV: dev
     command: python manage.py runserver 0.0.0.0:8777
     environment:
+      - DJANGO_HOST=*
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -65,11 +75,11 @@ services:
       - db:db
     depends_on:
       - db
-      - migrate
+      - import-api-migrate
     networks:
       komodo:
           ipv4_address: ${IMPORT_API_IPV4_ADDR}
-  migrate:
+  import-api-migrate:
     image: simple-working_import-api
     command: python manage.py migrate --noinput
     environment:
@@ -78,7 +88,45 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_PORT=5432
     volumes:
-      - ./src/:/code
+      - ./import-api/src/:/code
+    links:
+      - db:db
+    depends_on:
+      - db
+  juicychain-api:
+    build:
+      context: ./juicychain-api
+      args:
+        ENV: dev
+    command: python manage.py runserver 0.0.0.0:8999
+    environment:
+      - DJANGO_HOST=*
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./juicychain-api/src/:/code
+    ports:
+      - "8999:8999"
+    links:
+      - db:db
+    depends_on:
+      - db
+      - juicychain-api-migrate
+    networks:
+      komodo:
+          ipv4_address: ${JUICYCHAIN_API_IPV4_ADDR}
+  juicychain-api-migrate:
+    image: simple-working_juicychain-api
+    command: python manage.py migrate --noinput
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./juicychain-api/src/:/code
     links:
       - db:db
     depends_on:
