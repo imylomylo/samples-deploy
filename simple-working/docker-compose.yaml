@@ -14,6 +14,25 @@ services:
       - AC_SUPPLY=1000
       - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
       - JUICYCHAIN_TEST_NODE=144.76.148.154
+      - IMPORT_API_IP=${IMPORT_API_IPV4_ADDR}
+      - IMPORT_API_PORT=${IMPORT_API_PORT}
+      - THIS_NODE_WALLET=${THIS_NODE_WALLET}
+      - THIS_NODE_PUBKEY=${THIS_NODE_PUBKEY}
+      - THIS_NODE_WIF=${THIS_NODE_WIF}
+      - BLOCKNOTIFY_DIR=${BLOCKNOTIFY_DIR}
+      - BLOCKNOTIFY_CHAINSYNC_LIMIT=${BLOCKNOTIFY_CHAINSYNC_LIMIT}
+      - HOUSEKEEPING_ADDRESS=${HOUSEKEEPING_ADDRESS}
+      - DEV_IMPORT_API_JCF_BATCH_PATH=${DEV_IMPORT_API_JCF_BATCH_PATH}
+      - DEV_IMPORT_API_JCF_BATCH_REQUIRE_INTEGRITY_PATH=${DEV_IMPORT_API_JCF_BATCH_REQUIRE_INTEGRITY_PATH}
+      - DEV_IMPORT_API_JCF_BATCH_NEW_PATH=${DEV_IMPORT_API_JCF_BATCH_NEW_PATH}
+      - DEV_IMPORT_API_JCF_BATCH_INTEGRITY_PATH=${DEV_IMPORT_API_JCF_BATCH_INTEGRITY_PATH}
+      - DEV_IMPORT_API_RAW_REFRESCO_PATH=${DEV_IMPORT_API_RAW_REFRESCO_PATH}
+      - DEV_IMPORT_API_RAW_REFRESCO_REQUIRE_INTEGRITY_PATH=${DEV_IMPORT_API_RAW_REFRESCO_REQUIRE_INTEGRITY_PATH}
+      - DEV_IMPORT_API_RAW_REFRESCO_NEW_PATH=${DEV_IMPORT_API_RAW_REFRESCO_NEW_PATH}
+      - DEV_IMPORT_API_RAW_REFRESCO_INTEGRITY_PATH=${DEV_IMPORT_API_RAW_REFRESCO_INTEGRITY_PATH}
+      - IJUICE_KOMODO_NODE_USERNAME=${IJUICE_KOMODO_NODE_USERNAME}
+      - IJUICE_KOMODO_NODE_PASSWORD=${IJUICE_KOMODO_NODE_PASSWORD}
+      - IJUICE_KOMODO_NODE_RPC_PORT=${IJUICE_KOMODO_NODE_RPC_PORT}
     entrypoint:
       - "bash"
       - "-c"
@@ -30,11 +49,13 @@ services:
         -rpcallowip=127.0.0.1 \
         -rpcbind=0.0.0.0 \
         -rpcpassword=${IJUICE_KOMODO_NODE_PASSWORD} \
-        -rpcport=24708 \
+        -rpcport=${IJUICE_KOMODO_NODE_RPC_PORT} \
         -rpcuser=${IJUICE_KOMODO_NODE_USERNAME} \
         -server=1\
         -timeout=18000 \
-        -txindex=1
+        -txindex=1 \
+        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/jobs.sh %s" \
+        -pubkey=$${THIS_NODE_PUBKEY}
     ports:
       - "24707:24707"
       - "24708:24708"
@@ -43,20 +64,92 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
-  electrumx:
-    depends_on:
-      - ijuice-komodo-node
-    image: lukechilds/electrumx:v1.15.0
-    ports:
-      - "50001:50001"
-      - "50002:50002"
+      - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
+  import-api:
+    build:
+      context: ./import-api
+      args:
+        ENV: dev
+    command: python manage.py runserver 0.0.0.0:8777
     environment:
-      - LOG_LEVEL=debug
-      - COIN=Komodo
-      - DAEMON_URL=http://${IJUICE_KOMODO_NODE_USERNAME}:${IJUICE_KOMODO_NODE_PASSWORD}@${IJUICE_KOMODO_NODE_IPV4_ADDR}:24708
+      - DJANGO_HOST=*
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./import-api/src/:/app
+    ports:
+      - "8777:8777"
+    links:
+      - db:db
+    depends_on:
+      - db
+      - import-api-migrate
     networks:
       komodo:
-          ipv4_address: ${ELECTRUMX_IPV4_ADDR}
+          ipv4_address: ${IMPORT_API_IPV4_ADDR}
+  import-api-migrate:
+    image: simple-working_import-api
+    command: python manage.py migrate --noinput
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./import-api/src/:/code
+    links:
+      - db:db
+    depends_on:
+      - db
+  juicychain-api:
+    build:
+      context: ./juicychain-api
+      args:
+        ENV: dev
+    command: python manage.py runserver 0.0.0.0:8999
+    environment:
+      - DJANGO_HOST=*
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./juicychain-api/src/:/code
+    ports:
+      - "8999:8999"
+    links:
+      - db:db
+    depends_on:
+      - db
+      - juicychain-api-migrate
+    networks:
+      komodo:
+          ipv4_address: ${JUICYCHAIN_API_IPV4_ADDR}
+  juicychain-api-migrate:
+    image: simple-working_juicychain-api
+    command: python manage.py migrate --noinput
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./juicychain-api/src/:/code
+    links:
+      - db:db
+    depends_on:
+      - db
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      komodo:
+        ipv4_address: ${POSTGRES_IPV4_ADDR}
 networks:
   komodo:
     ipam:
