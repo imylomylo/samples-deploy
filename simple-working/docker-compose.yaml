@@ -109,24 +109,9 @@ services:
       - db:db
     depends_on:
       - db
-      - import-api-migrate
     networks:
       komodo:
           ipv4_address: ${IMPORT_API_IPV4_ADDR}
-  import-api-migrate:
-    image: simple-working_import-api
-    command: python manage.py migrate --noinput
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_PORT=5432
-    volumes:
-      - ./import-api/src/:/code
-    links:
-      - db:db
-    depends_on:
-      - db
   juicychain-api:
     build:
       context: ./juicychain-api
@@ -147,24 +132,9 @@ services:
       - db:db
     depends_on:
       - db
-      - juicychain-api-migrate
     networks:
       komodo:
           ipv4_address: ${JUICYCHAIN_API_IPV4_ADDR}
-  juicychain-api-migrate:
-    image: simple-working_juicychain-api
-    command: python manage.py migrate --noinput
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_PORT=5432
-    volumes:
-      - ./juicychain-api/src/:/code
-    links:
-      - db:db
-    depends_on:
-      - db
   db:
     image: postgres:12
     environment:
