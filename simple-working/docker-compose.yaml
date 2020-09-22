@@ -72,6 +72,22 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+  blocknotify-python:
+    build:
+      context: ./blocknotify-python
+      args:
+        ENV: dev
+    command: /code/run.sh
+    #command: /bin/bash
+    #stdin_open: true # docker run -i
+    #tty: true        # docker run -t
+    depends_on:
+      - ijuice-komodo-node
+      - import-api
+      - juicychain-api
+    networks:
+      komodo:
+        ipv4_address: ${BLOCKNOTIFY_PYTHON_IPV4_ADDR}
   import-api:
     build:
       context: ./import-api
