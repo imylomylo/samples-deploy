@@ -72,6 +72,7 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+      - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   blocknotify-python:
     build:
       context: ./blocknotify-python
