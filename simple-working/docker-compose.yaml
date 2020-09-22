@@ -63,7 +63,6 @@ services:
         -server=1\
         -timeout=18000 \
         -txindex=1 \
-        -blocknotify="/opt/komodo/blocknotify-python/run.sh %s" \
         -pubkey=$${THIS_NODE_PUBKEY}
     ports:
       - "24707:24707"
@@ -73,7 +72,6 @@ services:
           ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
     volumes:
       - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
-      - ./blocknotify-python:/opt/komodo/blocknotify-python
   import-api:
     build:
       context: ./import-api
