@@ -7,3 +7,6 @@
 [submodule "simple-working/juicychain-api"]
 	path = simple-working/juicychain-api
 	url = https://github.com/The-New-Fork/juicychain-api.git
+[submodule "simple-working/blocknotify-python"]
+	path = simple-working/blocknotify-python
+	url = https://github.com/The-New-Fork/blocknotify-python.git
