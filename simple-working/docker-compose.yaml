@@ -63,6 +63,7 @@ services:
         -server=1\
         -timeout=18000 \
         -txindex=1 \
+        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/status.sh %s" \
         -pubkey=$${THIS_NODE_PUBKEY}
     ports:
       - "24707:24707"
