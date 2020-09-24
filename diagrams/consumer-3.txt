@@ -30,4 +30,7 @@ Consumer -> ConsumerRestAPI : POST Transaction Sender Lookups
 activate Consumer
 ConsumerRestAPI -> DB : Find Artifacts By Sender Addresses
 Consumer <- ConsumerRestAPI : Return Artifacts As "Product Journey" Data
+note right
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/consumer-3.txt
+end note
 @enduml
