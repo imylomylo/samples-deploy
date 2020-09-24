@@ -3,7 +3,9 @@ autonumber
 skinparam ParticipantPadding 30
 "Organization User" -> "JuicyChainWebPortal" : login
 "JuicyChainWebPortal" -> "JuicyChainAPI" : getProfile(organization)
-
+note right
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/certificate-and-certificate-rule.txt
+end note
 box "JuicyChain"
 participant "JuicyChainWebPortal"
 participant "JuicyChainAPI"
