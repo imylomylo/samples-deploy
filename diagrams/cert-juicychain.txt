@@ -35,7 +35,7 @@ salt
   Serial Number | "C-10499101"
   R-Address | "R123certificate029skjf"
   Public Key | "0284202cdba309aef09c"
-  [Cancel] | [  Create   ]
+  [View Conditions] | [  Recent Activity   ]
 }
 }}
 " as update
