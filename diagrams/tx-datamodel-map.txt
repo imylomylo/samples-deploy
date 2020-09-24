@@ -1,5 +1,8 @@
 @startuml
 object "JuicyChain Data Model v1" as Receipt
+note left
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
+end note
 Receipt : REF_FROM : raddress(send)
 Receipt : REF_TO : raddress(na)
 Receipt : UUID : bigint(na)
@@ -52,9 +55,6 @@ CurrentProductLot : RpoolFromBatchLot123
 CurrentProductLot : RpoolToBatchLot123
 CurrentProductLot <-up- "satValue" Refresco : b
 CurrentBatch <.. Refresco : b
-note left
-  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
-end note
 CurrentProductLot <-- LocationHerrath : c
 LocationHerrath : GLN
 CurrentProductLot <-- CountryGermany : d
@@ -73,7 +73,6 @@ AustriaJuice : REF_FROM
 AllBatch <-- AustriaJuice : 1 satValue
 AllPO <.up. "satValue" AustriaJuice : 1
 AllCustomerPO <-down- AustriaJuice : 1 satValue
-
 CurrentBatch <-up- "satValue" ExpectDeliveryDate  : 2
 CurrentBatch <-up- LocationBialobrzegi : 3
 LocationBialobrzegi : GLN
