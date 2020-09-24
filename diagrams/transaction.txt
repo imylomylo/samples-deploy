@@ -22,11 +22,15 @@ CurrentPO <|-- Refresco : a
 AllProductLot <|-- "satValue" Refresco : b
 CurrentProductLot <|-up- "satValue" Refresco : b
 CurrentBatch <|.. Refresco : b
+note left
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/transaction.txt
+end note
 CurrentProductLot <|-- LocationHerrath : c
 CurrentProductLot <|-- CountryGermany : d
 CurrentProductLot <|-- "satValue" BestBeforeDates : e
 CurrentProductLot <|-- "satValue" JulianStartDates : f 
 CurrentProductLot <|-- "satValue" JulianEndDates : g
+
 
 CurrentBatch <|-- AustriaJuice : 1
 AllBatch <|-- AustriaJuice : 1
