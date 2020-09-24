@@ -1,14 +1,13 @@
 @startuml
 object "JuicyChain API" as JCAPI
+
 JCAPI : POOL_FROM_PO : raddress(main send satvalue)
 JCAPI : POOL_TO_PO : raddress(main send satvalue)
 JCAPI : POOL_FROM_BATCH_LOT : raddress(main send satvalue)
 JCAPI : POOL_TO_BATCH_LOT : raddress(main send satvalue)
 object "JuicyChain Data Model v1" as Receipt
-note left
-  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
-end note
-Receipt o-right- JCAPI
+
+Receipt o-up- JCAPI
 Receipt : REF_FROM : raddress(send)
 Receipt : REF_TO : raddress(na)
 Receipt : UUID : bigint(na)
@@ -40,50 +39,62 @@ object ExpectDeliveryDate
 object CurrentBatch
 object AllBatch
 object AllCustomerPO
+object ArticleNumber
+object MaterialNumber
+Receipt <|-left- CurrentBatch
 
-AllPO <-- "satValue" Refresco : a
-AllPO : POOL_FROM_PO
-CurrentPO <-- Refresco : a
-AllProductLot <-- "satValue" Refresco : b
-AllProductLot : POOL_FROM_BATCH_LOT
-Refresco : REF_FROM
-Receipt <|-- CurrentProductLot
-CurrentProductLot : UUID(11313-13134...)
-CurrentProductLot : BATCH_LOT(raddress)
-CurrentProductLot : RGTIN23lakjdsf
-CurrentProductLot : 11200100520
-CurrentProductLot : 11200100520
-CurrentProductLot : RpoolFromPO1123
-CurrentProductLot : RpoolToPO13sdf
-CurrentProductLot : RpoolFromBatchLot123
-CurrentProductLot : RpoolToBatchLot123
-CurrentProductLot <-up- "satValue" Refresco : b
-CurrentBatch <.. "JuicyChain API Lookup Ref" Refresco : b
-CurrentProductLot <-- LocationHerrath : c
-LocationHerrath : GLN
-CurrentProductLot <-- CountryGermany : d
-CountryGermany : ORIGIN
-CurrentProductLot <-- "satValue" BestBeforeDates : e
-BestBeforeDates : BB_DATE
-CurrentProductLot <-- "satValue" ProductionDate : e
-ProductionDate : PROD_DATE
-CurrentProductLot <-- "satValue" JulianStartDates : f 
-CurrentProductLot <-- "satValue" JulianEndDates : g
-JulianStartDates : PROD_JULIAN_START
-JulianEndDates : PROD_JULIAN_STOP
-Receipt <|-- CurrentBatch
-CurrentBatch <-- AustriaJuice : 1
+
+
+CurrentBatch <-down- AustriaJuice : 1
 AustriaJuice : REF_FROM
 AllBatch <-- AustriaJuice : 1 satValue
 AllBatch : POOL_FROM_BATCH_LOT
-AllPO <.up. "satValue & JCAPI Lookup Ref" AustriaJuice : 1
-AllCustomerPO <-down- AustriaJuice : 1 satValue
+AllPO <.. "satValue & JCAPI Lookup Ref" AustriaJuice : 1
+AllCustomerPO <-- AustriaJuice : 1 satValue
 AllCustomerPO : POOL_FROM_PO
-CurrentBatch <-up- "satValue" ExpectDeliveryDate  : 2
-CurrentBatch <-up- LocationBialobrzegi : 3
+CurrentBatch <-- "satValue" ExpectDeliveryDate  : 2
+CurrentBatch <-- LocationBialobrzegi : 3
 LocationBialobrzegi : GLN
-CurrentBatch <-up- CertificationAgrovet : 4
+CurrentBatch <-- MaterialNumber
+MaterialNumber : GTIN
+CurrentBatch <-- CertificationAgrovet : 4
 CertificationAgrovet : REF_TO(Refresco)
 CertificationAgrovet : GLN(Bialobrzegi)
-CertificationAgrovet : FROM_MAT_NUM(11200100520)
+CertificationAgrovet : FROM_MAT_NUM(GTIN)
+
+
+
+Receipt <|-right- CurrentProductLot
+
+
+AllPO <-- "satValue" Refresco : a
+AllPO : POOL_FROM_PO
+CurrentPO <-down- Refresco : a
+CurrentProductLot *--CurrentPO
+AllProductLot <-down- "satValue" Refresco : a
+note right
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
+end note
+AllProductLot : POOL_FROM_BATCH_LOT
+Refresco : REF_FROM
+CurrentProductLot : UUID(11313-13134...)
+CurrentProductLot : BATCH_LOT(raddress)
+CurrentProductLot : 11200100520
+CurrentProductLot : 11200100520
+CurrentProductLot <-left- ArticleNumber
+ArticleNumber : GTIN
+CurrentProductLot <-- "satValue" Refresco : a
+CurrentBatch <.left. "JuicyChain API Lookup Ref" Refresco : a
+CurrentProductLot <-- LocationHerrath : c
+LocationHerrath : GLN
+CurrentProductLot <-down- CountryGermany : d
+CountryGermany : ORIGIN
+CurrentProductLot <-down- "satValue" BestBeforeDates : e
+BestBeforeDates : BB_DATE
+CurrentProductLot <-down- "satValue" ProductionDate : e
+ProductionDate : PROD_DATE
+CurrentProductLot <-down- "satValue" JulianStartDates : f 
+CurrentProductLot <-down- "satValue" JulianEndDates : g
+JulianStartDates : PROD_JULIAN_START
+JulianEndDates : PROD_JULIAN_STOP
 @enduml
