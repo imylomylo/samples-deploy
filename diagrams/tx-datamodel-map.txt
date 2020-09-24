@@ -8,7 +8,7 @@ object "JuicyChain Data Model v1" as Receipt
 note left
   plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
 end note
-Receipt *-right- JCAPI
+Receipt o-right- JCAPI
 Receipt : REF_FROM : raddress(send)
 Receipt : REF_TO : raddress(na)
 Receipt : UUID : bigint(na)
