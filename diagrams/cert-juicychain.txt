@@ -1,0 +1,42 @@
+@startuml
+(*) --> "
+{{
+salt
+{^"Enter Certificate Details"
+  Certificate Name    | "ArgoVet"
+  Issuer | "FSA    "
+  Date Issued | "01/01/2020"
+  Date Expiry | "31/12/2022"
+  Serial Number | "C-10499101"
+  [Cancel] | [  Create   ]
+}
+}}
+" as upload
+
+
+upload -right-> JuicyChainAPI
+
+
+GetNewCertificate -up-> JuicyChainAPI
+GetNewCertificate -down-> ReadCertDetails
+ReadCertDetails -down-> SignDetails
+SignDetails -down-> CreateWallet
+CreateWallet --> UpdateWithBlockchainAddress
+UpdateWithBlockchainAddress --> JuicyChainAPI
+}
+JuicyChainAPI -right-> "
+{{
+salt
+{^"Certificate Details"
+  Certificate Name    | "ArgoVet"
+  Issuer | "FSA    "
+  Date Issued | "01/01/2020"
+  Date Expiry | "31/12/2022"
+  Serial Number | "C-10499101"
+  R-Address | "R123certificate029skjf"
+  Public Key | "0284202cdba309aef09c"
+  [Cancel] | [  Create   ]
+}
+}}
+" as update
+@enduml
