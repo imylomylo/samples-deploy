@@ -10,3 +10,5 @@ will not be lost when the `ijuice-komodo-node` container is restarted or deleted
 ## Some useful commands, based on current environment variables
 - from terminal: `docker exec simple-working_ijuice-komodo-node_1 tail -f /var/data/komodo/coindata/IJUICE/debug.log`.
 - from the ijuice-komodo-node: `curl --user changeme:alsochangeme --data '{"method": "getinfo"}' http://127.0.0.1:24708`.
+- rebuild blocknotify-python `docker rm simple-working_blocknotify-python_1 ; docker-compose up -d --no-deps --build blocknotify-python`
+- test blocknotify-python `docker start simple-working_blocknotify-python_1` and watch it in the docker-compose window
