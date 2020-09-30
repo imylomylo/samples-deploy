@@ -1,6 +1,6 @@
 @startuml
 note right
-  plantuml src https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/timestamp-import-to-juicychain.txt
+  plantuml src https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/timestamp-import-to-juicychain.plantuml.txt
 end note
 
 (*) -left-> "
@@ -134,7 +134,7 @@ salt
 " as webdata
 
 bcdata -left-> webdata
-
+BatchWallet -> bcdata
 GetPublicBatchRecord -right-> JuicyChainAPI
 GetPublicBatchRecord -left-> ConsumerProductJourney
 ConsumerProductJourney -left-> "
