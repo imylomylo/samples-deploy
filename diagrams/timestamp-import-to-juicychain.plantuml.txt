@@ -149,7 +149,7 @@ salt
 [ ] Send Record To Email
 [ ] Tweet This
 }
-[Close]
+[Search]
 }
 }}
 " as consumerview
