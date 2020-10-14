@@ -1,47 +1,35 @@
 version: "3.7"
 
 services:
-  ijuice-komodo-node:
+  jamjuice-komodo-node:
     build:
-      context: ./ijuice-komodo-node
+      context: ./jamjuice-komodo-node
       args:
-        - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
-    image: ijuice-komodo-node:test
+        - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${AC_NAME}
+        - P2P_PORT=${KOMODO_SMARTCHAIN_NODE_P2P_PORT}
+        - RPC_PORT=${KOMODO_SMARTCHAIN_NODE_RPC_PORT}
+    image: jamjuice-komodo-node:test
     environment:
       - AC_CC=2
       - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
-      - AC_REWARD=10000
-      - AC_SUPPLY=1000
-      - IJUICE_DATA_PATH=${DATA_PATH}/${AC_NAME}
-      - JUICYCHAIN_TEST_NODE=144.76.148.154
-      - IMPORT_API_IP=${IMPORT_API_IPV4_ADDR}
-      - IMPORT_API_PORT=${IMPORT_API_PORT}
-      - JUICYCHAIN_API_IP=${JUICYCHAIN_API_IP}
-      - JUICYCHAIN_API_PORT=${JUICYCHAIN_API_PORT}
-      - JUICYCHAIN_API_VERSION_PATH=${JUICYCHAIN_API_VERSION_PATH}
-      - JUICYCHAIN_API_ORGANIZATION_PATH=${JUICYCHAIN_API_ORGANIZATION_PATH}
-      - JUICYCHAIN_API_ORGANIZATION_BATCH=${JUICYCHAIN_API_ORGANIZATION_BATCH}
-      - JUICYCHAIN_API_ORGANIZATION_LOCATION=${JUICYCHAIN_API_ORGANIZATION_LOCATION}
-      - JUICYCHAIN_API_ORGANIZATION_CERTIFICATE=${JUICYCHAIN_API_ORGANIZATION_CERTIFICATE}
-      - JUICYCHAIN_API_ORGANIZATION_POOL_PO=${JUICYCHAIN_API_ORGANIZATION_POOL_PO}
-      - JUICYCHAIN_API_ORGANIZATION_POOL_BATCH=${JUICYCHAIN_API_ORGANIZATION_POOL_BATCH}
+      - AC_PUBLIC=${AC_PUBLIC}
+      - AC_ADAPTIVEPOW=${AC_ADAPTIVEPOW}
+      - AC_STAKED=${AC_STAKED}
+      - AC_REWARD=${AC_REWARD}
+      - AC_SUPPLY=${AC_SUPPLY}
+      - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${AC_NAME}
+      - ADD_NODE_1=${ADD_NODE_1}
+      - ADD_NODE_2=${ADD_NODE_2}
       - THIS_NODE_WALLET=${THIS_NODE_WALLET}
       - THIS_NODE_PUBKEY=${THIS_NODE_PUBKEY}
       - THIS_NODE_WIF=${THIS_NODE_WIF}
       - BLOCKNOTIFY_DIR=${BLOCKNOTIFY_DIR}
       - BLOCKNOTIFY_CHAINSYNC_LIMIT=${BLOCKNOTIFY_CHAINSYNC_LIMIT}
       - HOUSEKEEPING_ADDRESS=${HOUSEKEEPING_ADDRESS}
-      - DEV_IMPORT_API_JCF_BATCH_PATH=${DEV_IMPORT_API_JCF_BATCH_PATH}
-      - DEV_IMPORT_API_JCF_BATCH_REQUIRE_INTEGRITY_PATH=${DEV_IMPORT_API_JCF_BATCH_REQUIRE_INTEGRITY_PATH}
-      - DEV_IMPORT_API_JCF_BATCH_NEW_PATH=${DEV_IMPORT_API_JCF_BATCH_NEW_PATH}
-      - DEV_IMPORT_API_JCF_BATCH_INTEGRITY_PATH=${DEV_IMPORT_API_JCF_BATCH_INTEGRITY_PATH}
-      - DEV_IMPORT_API_RAW_REFRESCO_PATH=${DEV_IMPORT_API_RAW_REFRESCO_PATH}
-      - DEV_IMPORT_API_RAW_REFRESCO_REQUIRE_INTEGRITY_PATH=${DEV_IMPORT_API_RAW_REFRESCO_REQUIRE_INTEGRITY_PATH}
-      - DEV_IMPORT_API_RAW_REFRESCO_NEW_PATH=${DEV_IMPORT_API_RAW_REFRESCO_NEW_PATH}
-      - DEV_IMPORT_API_RAW_REFRESCO_INTEGRITY_PATH=${DEV_IMPORT_API_RAW_REFRESCO_INTEGRITY_PATH}
-      - IJUICE_KOMODO_NODE_USERNAME=${IJUICE_KOMODO_NODE_USERNAME}
-      - IJUICE_KOMODO_NODE_PASSWORD=${IJUICE_KOMODO_NODE_PASSWORD}
-      - IJUICE_KOMODO_NODE_RPC_PORT=${IJUICE_KOMODO_NODE_RPC_PORT}
+      - KOMODO_SMARTCHAIN_NODE_USERNAME=${KOMODO_SMARTCHAIN_NODE_USERNAME}
+      - KOMODO_SMARTCHAIN_NODE_PASSWORD=${KOMODO_SMARTCHAIN_NODE_PASSWORD}
+      - KOMODO_SMARTCHAIN_NODE_RPC_PORT=${KOMODO_SMARTCHAIN_NODE_RPC_PORT}
+      - KOMODO_SMARTCHAIN_NODE_P2P_PORT=${KOMODO_SMARTCHAIN_NODE_P2P_PORT}
     entrypoint:
       - "bash"
       - "-c"
@@ -50,29 +38,33 @@ services:
         -ac_cc=$${AC_CC} \
         -ac_name=${AC_NAME} \
         -ac_pubkey=$${AC_PUBKEY} \
+        -ac_public=$${AC_PUBLIC} \
+        -ac_adaptivepow=${AC_ADAPTIVEPOW} \
+        -ac_staked=${AC_STAKED} \
         -ac_reward=$${AC_REWARD} \
         -ac_supply=$${AC_SUPPLY} \
-        -addnode=$${JUICYCHAIN_TEST_NODE} \
-        -datadir=$${IJUICE_DATA_PATH} \
-        -rpcallowip=${DOCKER_KOMODO_NETWORK_SUBNET} \
+        -addnode=$${ADD_NODE_1} \
+        -addnode=$${ADD_NODE_2} \
+        -datadir=$${BLOCKCHAIN_DATA_PATH} \
+        -rpcallowip=${DOCKER_KOMODO_SMARTCHAIN_NETWORK_SUBNET} \
         -rpcallowip=127.0.0.1 \
         -rpcbind=0.0.0.0 \
-        -rpcpassword=${IJUICE_KOMODO_NODE_PASSWORD} \
-        -rpcport=${IJUICE_KOMODO_NODE_RPC_PORT} \
-        -rpcuser=${IJUICE_KOMODO_NODE_USERNAME} \
-        -server=1\
+        -rpcpassword=${KOMODO_SMARTCHAIN_NODE_PASSWORD} \
+        -rpcport=${KOMODO_SMARTCHAIN_NODE_RPC_PORT} \
+        -rpcuser=${KOMODO_SMARTCHAIN_NODE_USERNAME} \
+        -server=1 \
         -timeout=18000 \
         -txindex=1 \
         -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/status.sh %s" \
         -pubkey=$${THIS_NODE_PUBKEY}
     ports:
-      - "24707:24707"
-      - "24708:24708"
+      - "${KOMODO_SMARTCHAIN_NODE_P2P_PORT}:${KOMODO_SMARTCHAIN_NODE_P2P_PORT}"
+      - "${KOMODO_SMARTCHAIN_NODE_RPC_PORT}:${KOMODO_SMARTCHAIN_NODE_RPC_PORT}"
     networks:
       komodo:
-          ipv4_address: ${IJUICE_KOMODO_NODE_IPV4_ADDR}
+          ipv4_address: ${KOMODO_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
-      - ./ijuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+      - ./jamjuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
       - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   blocknotify-python:
     build:
@@ -84,7 +76,7 @@ services:
     #stdin_open: true # docker run -i
     #tty: true        # docker run -t
     depends_on:
-      - ijuice-komodo-node
+      - jamjuice-komodo-node
       - import-api
       - juicychain-api
     networks:
@@ -150,4 +142,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: ${DOCKER_KOMODO_NETWORK_SUBNET}
+        - subnet: ${DOCKER_KOMODO_SMARTCHAIN_NETWORK_SUBNET}
