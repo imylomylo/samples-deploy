@@ -10,7 +10,7 @@ services:
         - RPC_PORT=${KOMODO_SMARTCHAIN_NODE_RPC_PORT}
     image: jamjuice-komodo-node:test
     env_file:
-     - ./instance.XX_CLONE_XX.env
+     - ./.env
     environment:
       - AC_CC=2
       - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
@@ -73,8 +73,6 @@ services:
       context: ./blocknotify-python
       args:
         ENV: dev
-    env_file:
-     - ./instance.XX_CLONE_XX.env
     command: /code/run.sh
     #command: /bin/bash
     #stdin_open: true # docker run -i
@@ -91,7 +89,7 @@ services:
       args:
         ENV: dev
     env_file:
-     - ./instance.XX_CLONE_XX.env
+     - ./.env
     command: python manage.py runserver 0.0.0.0:8777
     environment:
       - DJANGO_HOST=*
