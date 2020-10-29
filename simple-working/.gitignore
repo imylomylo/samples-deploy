@@ -2,5 +2,6 @@ ijuice-komodo-node/data
 jamjuice-komodo-node/data
 jamjuice-komodo-node/data.**
 .env
-instance.**
+instance-**
 list.json**
+clones.migrate-import-api.sh
