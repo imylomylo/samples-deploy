@@ -49,7 +49,8 @@ do
         screen -dmS $INSTANCE bash -c "cd $INSTANCE; docker-compose --project-name $INSTANCE up; exec bash"
         echo "Be patient.  Sleeping for 6 seconds"
         echo "docker exec -i -t ${INSTANCE}_import-api_1 python manage.py migrate" >> $START/clones.migrate-import-api.sh
-        sed -i "s/XX_CLONE_XX/$INSTANCE/g" $START/$INSTANCE/pipeline-import.sh
+        sed -i "s/XX_INSTANCE_XX/$INSTANCE/g" $START/$INSTANCE/pipeline-import.sh
+        sed -i "s/XX_CLONE_XX/$CLONE/g" $START/$INSTANCE/pipeline-import.sh
         sleep 6
     else
 	echo "Try higher value, adding 1 to $CLONES"

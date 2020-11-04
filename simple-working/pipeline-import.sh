@@ -1,7 +1,8 @@
 #!/bin/bash
 INSTANCE=$1
-INSTANCE_PORT=$(docker ps -a | grep import-api | grep XX_CLONE_XX | awk '{print $12}' | awk -F ':' '{print $2}' | cut -d -  -f 1)
-API_HOST="http://78.46.94.84:$INSTANCE_PORT/"
+INSTANCE_PORT=$(docker inspect XX_INSTANCE_XX_import-api_1 | jq -r '.[].NetworkSettings.Ports."8777/tcp"|.[].HostPort')
+#API_HOST="http://172.XX_CLONE_XX.0.4:$INSTANCE_PORT/"
+API_HOST="http://127.0.0.1:$INSTANCE_PORT/"
 
 for i in {1..1}
 do
