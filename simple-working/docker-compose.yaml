@@ -1,14 +1,14 @@
 version: "3.7"
 
 services:
-  jamjuice-komodo-node:
+  demojuice-komodo-node:
     build:
-      context: ./jamjuice-komodo-node
+      context: ./demojuice-komodo-node
       args:
         - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${AC_NAME}
         - P2P_PORT=${KOMODO_SMARTCHAIN_NODE_P2P_PORT}
         - RPC_PORT=${KOMODO_SMARTCHAIN_NODE_RPC_PORT}
-    image: jamjuice-komodo-node:test
+    image: demojuice-komodo-node:test
     environment:
       - AC_CC=2
       - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
@@ -64,7 +64,7 @@ services:
       komodo:
           ipv4_address: ${KOMODO_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
-      - ./jamjuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+      - ./demojuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
       - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   blocknotify-python:
     build:
@@ -76,7 +76,7 @@ services:
     #stdin_open: true # docker run -i
     #tty: true        # docker run -t
     depends_on:
-      - jamjuice-komodo-node
+      - demojuice-komodo-node
       - import-api
       - juicychain-api
     networks:
