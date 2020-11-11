@@ -3,6 +3,8 @@ jamjuice-komodo-node/data
 jamjuice-komodo-node/data.**
 demojuice-komodo-node/data
 demojuice-komodo-node/data.**
+stagingjuice-komodo-node/data
+stagingjuice-komodo-node/data.**
 .env
 instance-**
 list.json**
