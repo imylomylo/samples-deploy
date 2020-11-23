@@ -5,7 +5,7 @@ START=$PWD
 CLONES=$1
 
 # get last created number from this script by looking at currently running containers
-LAST_CREATED=$(docker ps -a | grep jamjuice | awk '{print $14}' | awk -F '_' '{print $1}' |cut -d - -f 2 | sort | tail -n 1)
+LAST_CREATED=$(docker ps -a | grep jamjuice | grep -v working | awk '{print $14}' | awk -F '_' '{print $1}' |cut -d - -f 2 | sort | tail -n 1)
 
 # handy script for running db migrations for each instance import-api
 touch clones.migrate-import-api.sh
@@ -17,7 +17,7 @@ if [ -z $LAST_CREATED ] ; then
 fi
 
 # start loop to create instances
-for (( i = 0 ; i <  $CLONES ; i++ ))
+for (( i = 0 ; i < $CLONES ; i++ ))
 do
     cd $START
     # add 100, this forms the octet for network segregation e.g. 172.XXX.0.0/16
@@ -25,7 +25,8 @@ do
     echo "Next in clone instance is $CLONE, last created before this script execution was $LAST_CREATED"
     sleep 1
     # check if this iteration is greater than the last known created instance (helpful at the start or when re-running to make more)
-    if [ $CLONE -gt $LAST_CREATED ] ; then 
+    echo $CLONE ">" $LAST_CREATED "?"
+    if [ "$CLONE" -gt "$LAST_CREATED" ] ; then 
 	# name of this instance 
         INSTANCE=instance-$CLONE
 	# make working dir for this instance organization and link stuff required
