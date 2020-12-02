@@ -5,6 +5,8 @@ demojuice-komodo-node/data
 demojuice-komodo-node/data.**
 stagingjuice-komodo-node/data
 stagingjuice-komodo-node/data.**
+kv1stagingjuice-komodo-node/data
+kv1stagingjuice-komodo-node/data.**
 .env
 instance-**
 list.json**

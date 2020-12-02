@@ -1,6 +1,71 @@
 version: "3.7"
 
 services:
+  kv1stagingjuice-komodo-node:
+    build:
+      context: ./stagingjuice-komodo-node
+      args:
+        - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${KV1_NAME}
+        - P2P_PORT=${KV1_SMARTCHAIN_NODE_P2P_PORT}
+        - RPC_PORT=${KV1_SMARTCHAIN_NODE_RPC_PORT}
+    image: stagingjuice-komodo-node:test
+    environment:
+      - AC_CC=2
+      - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
+      - AC_PUBLIC=${AC_PUBLIC}
+      - AC_ADAPTIVEPOW=${AC_ADAPTIVEPOW}
+      - AC_STAKED=${AC_STAKED}
+      - AC_REWARD=${AC_REWARD}
+      - AC_SUPPLY=${AC_SUPPLY}
+      - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${KV1_NAME}
+      - ADD_NODE_1=${ADD_NODE_1}
+      - ADD_NODE_2=${ADD_NODE_2}
+      - THIS_NODE_WALLET=${THIS_NODE_WALLET}
+      - THIS_NODE_PUBKEY=${THIS_NODE_PUBKEY}
+      - THIS_NODE_WIF=${THIS_NODE_WIF}
+      - BLOCKNOTIFY_DIR=${BLOCKNOTIFY_DIR}
+      - BLOCKNOTIFY_CHAINSYNC_LIMIT=${BLOCKNOTIFY_CHAINSYNC_LIMIT}
+      - HOUSEKEEPING_ADDRESS=${HOUSEKEEPING_ADDRESS}
+      - KV1_SMARTCHAIN_NODE_USERNAME=${KV1_SMARTCHAIN_NODE_USERNAME}
+      - KV1_SMARTCHAIN_NODE_PASSWORD=${KV1_SMARTCHAIN_NODE_PASSWORD}
+      - KV1_SMARTCHAIN_NODE_RPC_PORT=${KV1_SMARTCHAIN_NODE_RPC_PORT}
+      - KV1_SMARTCHAIN_NODE_P2P_PORT=${KV1_SMARTCHAIN_NODE_P2P_PORT}
+    entrypoint:
+      - "bash"
+      - "-c"
+      - |
+        /opt/komodo/komodo/src/komodod \
+        -ac_cc=$${AC_CC} \
+        -ac_name=${KV1_NAME} \
+        -ac_pubkey=$${AC_PUBKEY} \
+        -ac_public=$${AC_PUBLIC} \
+        -ac_adaptivepow=${AC_ADAPTIVEPOW} \
+        -ac_staked=${AC_STAKED} \
+        -ac_reward=$${AC_REWARD} \
+        -ac_supply=$${AC_SUPPLY} \
+        -addnode=$${ADD_NODE_1} \
+        -addnode=$${ADD_NODE_2} \
+        -datadir=$${BLOCKCHAIN_DATA_PATH} \
+        -rpcallowip=${DOCKER_KOMODO_SMARTCHAIN_NETWORK_SUBNET} \
+        -rpcallowip=127.0.0.1 \
+        -rpcbind=0.0.0.0 \
+        -rpcpassword=${KV1_SMARTCHAIN_NODE_PASSWORD} \
+        -rpcport=${KV1_SMARTCHAIN_NODE_RPC_PORT} \
+        -rpcuser=${KV1_SMARTCHAIN_NODE_USERNAME} \
+        -server=1 \
+        -timeout=18000 \
+        -txindex=1 \
+        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/status.sh %s" \
+        -pubkey=$${THIS_NODE_PUBKEY}
+    ports:
+      - "${KV1_SMARTCHAIN_NODE_P2P_PORT}:${KV1_SMARTCHAIN_NODE_P2P_PORT}"
+      - "${KV1_SMARTCHAIN_NODE_RPC_PORT}:${KV1_SMARTCHAIN_NODE_RPC_PORT}"
+    networks:
+      komodo:
+          ipv4_address: ${KV1_SMARTCHAIN_NODE_IPV4_ADDR}
+    volumes:
+      - ./kv1stagingjuice-komodo-node/data:${DATA_PATH}/${KV1_NAME}
+      - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   stagingjuice-komodo-node:
     build:
       context: ./stagingjuice-komodo-node
