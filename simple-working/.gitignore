@@ -11,3 +11,6 @@ kv1stagingjuice-komodo-node/data.**
 instance-**
 list.json**
 clones.migrate-import-api.sh
+.venv
+venv/
+.idea

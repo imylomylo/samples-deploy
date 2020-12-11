@@ -170,6 +170,17 @@ services:
     networks:
       komodo:
           ipv4_address: ${IMPORT_API_IPV4_ADDR}
+  inject-import-api-batch:
+    build:
+      context: ./inject-import-api-batch
+      args:
+        ENV: dev
+    command: python noauth-batch-create-refresco.py 1
+    environment:
+      - IMPORT_API_BASE_URL=http://${IMPORT_API_IPV4_ADDR}:${IMPORT_API_PORT}/
+    networks:
+      komodo:
+          ipv4_address: ${INJECT_IMPORT_API_BATCH_IPV4_ADDR}
   juicychain-api:
     build:
       context: ./juicychain-api
