@@ -66,45 +66,6 @@ services:
     volumes:
       - ./jamjuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
       - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
-  blocknotify-python:
-    build:
-      context: ./blocknotify-python
-      args:
-        ENV: dev
-    command: /code/run.sh
-    #command: /bin/bash
-    #stdin_open: true # docker run -i
-    #tty: true        # docker run -t
-    depends_on:
-      - jamjuice-komodo-node
-      - import-api
-      - juicychain-api
-    networks:
-      komodo:
-        ipv4_address: ${BLOCKNOTIFY_PYTHON_IPV4_ADDR}
-  import-api:
-    build:
-      context: ./import-api
-      args:
-        ENV: dev
-    command: python manage.py runserver 0.0.0.0:8777
-    environment:
-      - DJANGO_HOST=*
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_PORT=5432
-    volumes:
-      - ./import-api/src/:/code
-    ports:
-      - "8777:8777"
-    links:
-      - db:db
-    depends_on:
-      - db
-    networks:
-      komodo:
-          ipv4_address: ${IMPORT_API_IPV4_ADDR}
   juicychain-api:
     build:
       context: ./juicychain-api
