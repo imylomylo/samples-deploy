@@ -22,7 +22,7 @@ do
 	RANDOM_VAL_PC="DE"
 	RANDOM_VAL_PL="Herrath"
 	RANDOM_VAL_RMN=11200100520
-	RANDOM_VAL_PON=$(cat /dev/urandom | tr -dc '0-9' | fold -w 10 | head -n 1)
+	RANDOM_VAL_PON=100$(cat /dev/urandom | tr -dc '0-9' | fold -w 7 | head -n 1)
 	RANDOM_VAL_POP=$(cat /dev/urandom | tr -dc '1-9' | fold -w 3 | head -n 1)
 	JDS=$((PROD_RANDOM_START_DAY + 31)) 
 	JDE=$((PROD_END_DAY + 31))
