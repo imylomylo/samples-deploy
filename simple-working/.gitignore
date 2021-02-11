@@ -1,6 +1,8 @@
 ijuice-komodo-node/data
 jamjuice-komodo-node/data
 jamjuice-komodo-node/data.**
+jamjuicekv-komodo-node/data
+jamjuicekv-komodo-node/data.**
 .env
 instance-**
 list.json**
