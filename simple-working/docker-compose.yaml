@@ -49,6 +49,7 @@ services:
         -datadir=$${BLOCKCHAIN_DATA_PATH} \
         -rpcallowip=${DOCKER_KOMODO_SMARTCHAIN_NETWORK_SUBNET} \
         -rpcallowip=127.0.0.1 \
+        -rpcallowip=172.29.0.1 \
         -rpcbind=0.0.0.0 \
         -rpcpassword=${KV1_SMARTCHAIN_NODE_PASSWORD} \
         -rpcport=${KV1_SMARTCHAIN_NODE_RPC_PORT} \
