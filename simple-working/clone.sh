@@ -37,7 +37,7 @@ do
         ln -sf -t $INSTANCE ../import-api
         ln -sf -t $INSTANCE ../customer-smartchain-nodes-blocknotify
 	# copy the template scripts & env for this instance
-        cp run-blocknotify.sh $INSTANCE
+        cp clone.run-blocknotify.sh $INSTANCE/run-blocknotify.sh
         cp build-service.sh $INSTANCE
         cp pipeline-import.sh $INSTANCE
         cp $START/clone.XX_CLONE_XX.env $INSTANCE/.env
