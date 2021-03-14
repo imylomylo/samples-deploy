@@ -62,6 +62,7 @@ do
         sed -i "s/XX_THIS_NODE_PUBKEY_XX/$THIS_CLONE_PUBKEY/g" $INSTANCE/blocknotify-python/.env
         sed -i "s/XX_THIS_NODE_WIF_XX/$THIS_CLONE_WIF/g" $INSTANCE/blocknotify-python/.env
         sed -i "s/XX_THIS_NODE_WALLET_XX/$THIS_CLONE_ADDRESS/g" $INSTANCE/blocknotify-python/.env
+	cp $INSTANCE/blocknotify-python/.env $INSTANCE/.env-blocknotify-python
         sed -i "s/XX_INSTANCE_XX/$INSTANCE/g" $START/$INSTANCE/pipeline-import.sh
         sed -i "s/XX_CLONE_XX/$CLONE/g" $START/$INSTANCE/pipeline-import.sh
         cd $INSTANCE
