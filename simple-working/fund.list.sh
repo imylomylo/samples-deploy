@@ -8,5 +8,5 @@ done
 SENDMANYARG=`echo $SENDMANYARG | sed 's/.$//'`
 SENDMANYARG=$SENDMANYARG"}"
 
-echo "komodo-cli -ac_name=JAMJUICE2 sendmany \"\" '$SENDMANYARG'"
-echo "komodo-cli -ac_name=JAMJUICE2KV sendmany \"\" '$SENDMANYARG'"
+echo "komodo-cli -ac_name=JAMJUICE3 sendmany \"\" '$SENDMANYARG'"
+echo "komodo-cli -ac_name=JAMJUICE3KV1 sendmany \"\" '$SENDMANYARG'"
