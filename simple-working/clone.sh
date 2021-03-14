@@ -5,7 +5,7 @@ START=$PWD
 CLONES=$1
 
 # get last created number from this script by looking at currently running containers
-LAST_CREATED=$(docker ps -a | grep jamjuice2kv | grep -v working | sed -n 's/^.*\(instance.*\).*/\1/p' | sort | tail -n 1 | cut -d '_' -f 1 | cut -d '-' -f 2)
+LAST_CREATED=$(docker ps -a | grep jamjuicekv1 | grep -v working | sed -n 's/^.*\(instance.*\).*/\1/p' | sort | tail -n 1 | cut -d '_' -f 1 | cut -d '-' -f 2)
 
 # handy script for running db migrations for each instance import-api
 touch clones.migrate-import-api.sh
@@ -33,6 +33,9 @@ do
         mkdir $INSTANCE
         ln -sf -t $INSTANCE/ ../blocknotify-python
         ln -sf -t $INSTANCE ../jamjuice-komodo-node
+        mkdir $INSTANCE/jamjuice-data
+        ln -sf -t $INSTANCE ../jamjuicekv-komodo-node
+        mkdir $INSTANCE/jamjuicekv1-data
         ln -sf -t $INSTANCE ../juicychain-api
         ln -sf -t $INSTANCE ../import-api
         ln -sf -t $INSTANCE ../customer-smartchain-nodes-blocknotify
