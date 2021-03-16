@@ -1,3 +1,5 @@
+**MASTER** branch is useless for this repo - use the latest jamjuiceX, stagingjuice
+
 ## Notes:
 - To run: `docker-compose up`.
 - The data from juicy chain will be saved locally to `./ijuice-komodo-node/data`, blockchain data
