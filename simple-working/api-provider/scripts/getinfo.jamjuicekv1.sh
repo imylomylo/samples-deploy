@@ -2,7 +2,7 @@
 #rpcuser=changeme
 #rpcpassword=alsochangeme
 #rpcport=33063
-source .env
+source ../../.env
 rpcuser=$KV1_SMARTCHAIN_NODE_USERNAME
 rpcpassword=$KV1_SMARTCHAIN_NODE_PASSWORD
 rpcport=$KV1_SMARTCHAIN_NODE_RPC_PORT
