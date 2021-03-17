@@ -1,0 +1,101 @@
+@startuml
+class "OpenFood API" as OFAPI<< (W,#FF7700) API >>
+
+OFAPI : POOL_FROM_PO : raddress(main send satvalue)
+OFAPI : POOL_TO_PO : raddress(main send satvalue)
+OFAPI : POOL_FROM_BATCH_LOT : raddress(main send satvalue)
+OFAPI : POOL_TO_BATCH_LOT : raddress(main send satvalue)
+object "OpenFood Data Model v1" as Receipt
+
+Receipt o-up- OFAPI
+Receipt : REF_FROM : raddress(send)
+Receipt : REF_TO : raddress(na)
+Receipt : UUID : bigint(na)
+Receipt : BATCH_LOT : raddress(receive)
+Receipt : GTIN : raddress(send small)
+Receipt : PROD_DATE : raddress(send 0.satvalue)
+Receipt : BB_DATE : raddress(send 0.satvalue)
+Receipt : ORIGIN : raddress(send small)
+Receipt : GLN : raddress(send small)
+Receipt : FROM_MAT_NUM : bigint(send satvalue1)
+Receipt : TO_MAT_NUM : bigint(send satvalue2)
+Receipt : PROD_JULIAN_START : raddress(send coinvalue)
+Receipt : PROD_JULIAN_STOP : raddress(send coinvalue)
+class ParticipantX<< (K,#006400) KomodoNodeWallet >>
+class ParticipantY<< (K,#006400) KomodoNodeWallet >>
+class AllPO<< (P,#ddbbcc) PaperWallet>>
+class CurrentPO << (P,#ddbbcc) PaperWallet>> #Orange
+class AllProductLot<< (P,#ddbbcc) PaperWallet>>
+class CurrentProductLot<< (P,#ddbbcc) PaperWallet>> #Orange
+class LocationABC1<< (O,#00bbcc) OfflineWallet>>
+class CountryCode<< (O,#00bbcc) OfflineWallet>>
+class BestBeforeDates<< (O,#00bbcc) OfflineWallet>>
+class ProductionDate<< (O,#00bbcc) OfflineWallet>>
+class JulianStartDates<< (O,#00bbcc) OfflineWallet>>
+class JulianEndDates<< (O,#00bbcc) OfflineWallet>>
+class CertificationCERTX<< (O,#00bbcc) OfflineWallet>>
+class LocationABC1<< (O,#00bbcc) OfflineWallet>>
+class ExpectDeliveryDate<< (O,#00bbcc) OfflineWallet>>
+class CurrentBatch<< (P,#ddbbcc) PaperWallet>> #Orange
+class AllBatch<< (P,#ddbbcc) PaperWallet>>
+class AllCustomerPO<< (P,#ddbbcc) PaperWallet>>
+class ArticleNumber<< (O,#00bbcc) OfflineWallet>>
+class MaterialNumber<< (O,#00bbcc) OfflineWallet>>
+Receipt <|-left- CurrentBatch
+
+
+
+CurrentBatch <-down- ParticipantY : 1
+CurrentBatch : BATCH_LOT
+ParticipantY : REF_FROM
+AllBatch <-- ParticipantY : 1 satValue
+AllBatch : POOL_FROM_BATCH_LOT
+AllPO <.. "satValue & OFAPI Lookup Ref" ParticipantY : 1
+AllCustomerPO <-- ParticipantY : 1 satValue
+AllCustomerPO : POOL_FROM_PO
+CurrentBatch <-- "satValue" ExpectDeliveryDate  : 2
+CurrentBatch <-- LocationABC1 : 3
+LocationXYZ1 : GLN
+CurrentBatch <-- MaterialNumber
+MaterialNumber : GTIN
+CurrentBatch <-- CertificationCERTX : 4
+CertificationCERTX : REF_TO(ParticipantX)
+CertificationCERTX : GLN(LocationXYZ1)
+CertificationCERTX : FROM_MAT_NUM(GTIN)
+
+
+
+Receipt <|-right- CurrentProductLot
+
+
+AllPO <-- "satValue" ParticipantX : a
+AllPO : POOL_FROM_PO
+CurrentPO <-down- ParticipantX : a
+CurrentProductLot *--CurrentPO
+AllProductLot <-down- "satValue" ParticipantX : a
+note right
+  plantuml src: https://github.com/The-New-Fork/deploy-samples/blob/master/diagrams/tx-datamodel-map.txt
+end note
+AllProductLot : POOL_FROM_BATCH_LOT
+ParticipantX : REF_FROM
+CurrentProductLot : UUID(11313-13134...)
+CurrentProductLot : BATCH_LOT
+CurrentProductLot : 11200100520
+CurrentProductLot : 11200100520
+CurrentProductLot <-left- ArticleNumber
+ArticleNumber : GTIN
+CurrentProductLot <-- "satValue" ParticipantX : a
+CurrentBatch <.left. "OpenFood API Lookup Ref" ParticipantX : a
+CurrentProductLot <-- LocationXYZ1 : c
+LocationABC1 : GLN
+CurrentProductLot <-down- CountryCode : d
+CountryCode : ORIGIN
+CurrentProductLot <-down- "satValue" BestBeforeDates : e
+BestBeforeDates : BB_DATE
+CurrentProductLot <-down- "satValue" ProductionDate : e
+ProductionDate : PROD_DATE
+CurrentProductLot <-down- "satValue" JulianStartDates : f 
+CurrentProductLot <-down- "satValue" JulianEndDates : g
+JulianStartDates : PROD_JULIAN_START
+JulianEndDates : PROD_JULIAN_STOP
+@enduml
