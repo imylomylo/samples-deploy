@@ -65,7 +65,7 @@ services:
       komodo:
           ipv4_address: ${KV1_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
-      - ./jamjuicekv-komodo-node/data:${DATA_PATH}/${KV1_NAME}
+      - ./api-provider/jamjuicekv-komodo-node/data:${DATA_PATH}/${KV1_NAME}
       - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   jamjuice-komodo-node:
     build:
@@ -131,7 +131,7 @@ services:
       komodo:
           ipv4_address: ${KOMODO_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
-      - ./jamjuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
+      - ./api-provider/jamjuice-komodo-node/data:${DATA_PATH}/${AC_NAME}
       - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   juicychain-api:
     build:
