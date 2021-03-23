@@ -55,7 +55,6 @@ services:
         -server=1 \
         -timeout=18000 \
         -txindex=1 \
-        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/status.sh %s" \
         -pubkey=$${THIS_NODE_PUBKEY}
     ports:
       - "${KV1_SMARTCHAIN_NODE_P2P_PORT}"
@@ -65,7 +64,6 @@ services:
           ipv4_address: ${KV1_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
       - ./jamjuicekv1-data:${DATA_PATH}/${KV1_NAME}
-      - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   jamjuice-komodo-node:
     build:
       context: ./jamjuice-komodo-node
@@ -120,7 +118,6 @@ services:
         -server=1 \
         -timeout=18000 \
         -txindex=1 \
-        -blocknotify="/opt/komodo/customer-smartchain-nodes-blocknotify/status.sh %s" \
         -pubkey=$${THIS_NODE_PUBKEY}
     ports:
       - "${KOMODO_SMARTCHAIN_NODE_P2P_PORT}"
@@ -130,7 +127,6 @@ services:
           ipv4_address: ${KOMODO_SMARTCHAIN_NODE_IPV4_ADDR}
     volumes:
       - ./jamjuice-data:${DATA_PATH}/${AC_NAME}
-      - ./customer-smartchain-nodes-blocknotify:/opt/komodo/customer-smartchain-nodes-blocknotify
   blocknotify-python:
     build:
       context: ./blocknotify-python
