@@ -3,7 +3,7 @@ version: "3.7"
 services:
   jamjuicekv1-komodo-node:
     build:
-      context: ./jamjuice-komodo-node
+      context: ./data/jamjuice-komodo-node
       args:
         - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${KV1_NAME}
         - P2P_PORT=${KV1_SMARTCHAIN_NODE_P2P_PORT}
@@ -67,7 +67,7 @@ services:
       - ./data/jamjuicekv1-komodo-node:${DATA_PATH}/${KV1_NAME}
   jamjuice-komodo-node:
     build:
-      context: ./jamjuice-komodo-node
+      context: ./data/jamjuice-komodo-node
       args:
         - BLOCKCHAIN_DATA_PATH=${DATA_PATH}/${AC_NAME}
         - P2P_PORT=${KOMODO_SMARTCHAIN_NODE_P2P_PORT}
