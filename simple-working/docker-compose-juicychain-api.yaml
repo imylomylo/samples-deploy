@@ -1,12 +1,12 @@
 version: "3.7"
 
 services:
-  juicychain-api:
+  juicychain-api-standalone:
     build:
       context: ./juicychain-api
       args:
         ENV: dev
-    command: python manage.py runserver 0.0.0.0:8999
+    command: python manage.py runserver 0.0.0.0:8998
     environment:
       - DJANGO_HOST=*
       - POSTGRES_DB=postgres
@@ -16,15 +16,15 @@ services:
     volumes:
       - ./juicychain-api/src/:/code
     ports:
-      - "8999:8999"
+      - "8998:8998"
     links:
-      - db:db
+      - dbjcapistandalone:dbjcapistandalone
     depends_on:
-      - db
+      - dbjcapistandalone
     networks:
       komodo:
-          ipv4_address: ${JUICYCHAIN_API_IPV4_ADDR}
-  db:
+          ipv4_address: ${STANDALONE_JUICYCHAIN_API_IPV4_ADDR}
+  dbjcapistandalone:
     image: postgres:12
     environment:
       - POSTGRES_DB=postgres
@@ -32,7 +32,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       komodo:
-        ipv4_address: ${POSTGRES_IPV4_ADDR}
+        ipv4_address: ${STANDALONE_POSTGRES_IPV4_ADDR}
 networks:
   komodo:
     ipam:
