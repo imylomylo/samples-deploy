@@ -12,7 +12,6 @@ services:
     environment:
       - AC_CC=2
       - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
-      - AC_PUBLIC=${AC_PUBLIC}
       - AC_ADAPTIVEPOW=${AC_ADAPTIVEPOW}
       - AC_STAKED=${AC_STAKED}
       - AC_REWARD=${AC_REWARD}
@@ -38,7 +37,6 @@ services:
         -ac_cc=$${AC_CC} \
         -ac_name=${KV1_NAME} \
         -ac_pubkey=$${AC_PUBKEY} \
-        -ac_public=$${AC_PUBLIC} \
         -ac_adaptivepow=${AC_ADAPTIVEPOW} \
         -ac_staked=${AC_STAKED} \
         -ac_reward=$${AC_REWARD} \
@@ -77,7 +75,6 @@ services:
     environment:
       - AC_CC=2
       - AC_PUBKEY=038afbc819aecfb3d65acdf270f755c9279d69d4a27293f10889264b8bd6c1fae2
-      - AC_PUBLIC=${AC_PUBLIC}
       - AC_ADAPTIVEPOW=${AC_ADAPTIVEPOW}
       - AC_STAKED=${AC_STAKED}
       - AC_REWARD=${AC_REWARD}
@@ -103,7 +100,6 @@ services:
         -ac_cc=$${AC_CC} \
         -ac_name=${AC_NAME} \
         -ac_pubkey=$${AC_PUBKEY} \
-        -ac_public=$${AC_PUBLIC} \
         -ac_adaptivepow=${AC_ADAPTIVEPOW} \
         -ac_staked=${AC_STAKED} \
         -ac_reward=$${AC_REWARD} \
