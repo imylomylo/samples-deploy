@@ -5,7 +5,7 @@ RUN apt-get update && \
 RUN mkdir /opt/komodo
 WORKDIR /opt/komodo
 
-RUN git clone https://github.com/mixa84/komodo.git && \
+RUN git clone https://github.com/The-New-Fork/komodo.git && \
   cd komodo && \
   git checkout cc_mixed && \
   ./zcutil/build.sh -j4 && \
