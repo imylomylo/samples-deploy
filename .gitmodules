@@ -1,0 +1,3 @@
+[submodule "simple-workings"]
+	path = simple-workings
+	url = https://github.com/The-New-Fork/python-blocknotify
