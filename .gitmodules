@@ -1,3 +1,12 @@
 [submodule "simple-working/blocknotify-python"]
 	path = simple-working/blocknotify-python
 	url = https://github.com/The-New-Fork/python-blocknotify
+[submodule "simple-working/import-api"]
+	path = simple-working/import-api
+	url = https://github.com/The-New-Fork/api-import
+[submodule "simple-working/juicychain-api"]
+	path = simple-working/juicychain-api
+	url = https://github.com/The-New-Fork/api-juicychain
+[submodule "simple-working/smartchain-node"]
+	path = simple-working/smartchain-node
+	url = https://github.com/Diesmaster/smartchain-node-for-customers
