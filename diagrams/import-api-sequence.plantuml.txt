@@ -1,0 +1,81 @@
+@startuml
+participant "Data Provider" as Integration
+
+Integration -> ImportAPI: import_raw_refresco_batch_integrity_pre_process(org_wallet, data, import_id)
+
+== Next processing run of blocknotify imports new batch data ==
+
+Blocknotify -> ImportAPI : get_new_imports(have_null_integrity_details)
+activate Blocknotify
+
+Blocknotify -> libJuicyChain: gen_wallet() 2x..Nx
+activate libJuicyChain
+libJuicyChain -> Blocknotify : response(wallet)
+
+Blocknotify -> libJuicyChain : wrapper_sign_data_for_batch_integrity_paperwallet
+libJuicyChain -> Blockchain : signmessage(rpc, org_wallet, data)
+libJuicyChain -> Blocknotify : response(encrypted_data)
+
+Blocknotify -> libJuicyChain : gen_wallet(encrypted_data)
+libJuicyChain -> Blocknotify : response(batch_integrity_r_address)
+
+Blocknotify -> libJuicyChain : create_batch_integrity_record(import_id, batch_integrity_r_address)
+libJuicyChain -> libJuicyChain : fire_POST(url, data)
+libJuicyChain -> ImportAPI : POST_create_integrity_record(url, data)
+note left : database constraint of unique r-address
+
+== integrity begin ==
+
+Blocknotify -> libJuicyChain : send_integrity_begin_transaction(timestamp_begin_integrity)
+libJuicyChain -> Blockchain : wrapper_sendtoaddress()
+libJuicyChain -> Blocknotify : response(txid)
+Blocknotify -> libJuicyChain : update_integrity_begin(txid)
+libJuicyChain -> libJuicyChain : fire_PUT(url, data)
+libJuicyChain -> ImportAPI : PUT_update_record_with_begin_txid(url, data)
+
+== timestamping transactions start here ==
+
+Blocknotify -> libJuicyChain : org_wallet_send_batch_transactions()
+libJuicyChain -> Blockchain : sendmany()
+libJuicyChain -> Blocknotify : response(txid)
+Blocknotify -> libJuicyChain : org_timestamping_batch(txid)
+libJuicyChain -> libJuicyChain : fire_POST(url, data)
+libJuicyChain -> ImportAPI : POST_create_timestamp_record(url, data)
+
+== repeat for all offline wallets e.g. location, dates etc ==
+
+Blocknotify -> libJuicyChain : certificate_timestamping_batch()
+libJuicyChain -> libJuicyChain : get_address_utxos()
+libJuicyChain -> Explorer : GET_address_utxos()
+libJuicyChain -> libJuicyChain : create_transaction_template()
+libJuicyChain -> libJuicyChain : sign_transaction()
+libJuicyChain -> Explorer : POST_broadcast_transaction()
+libJuicyChain -> Blocknotify : response(txid)
+Blocknotify -> libJuicyChain : offlinewallet_timestamping_batch(txid)
+libJuicyChain -> libJuicyChain : fire_POST(url, data)
+libJuicyChain -> ImportAPI : POST_create_timestamp_record(url, data)
+
+== push relevant public import data to public juicychain api ==
+
+Blocknotify -> libJuicyChain : send_batch_data_juicychainapi(data)
+libJuicyChain -> libJuicyChain : fire_POST(url, data)
+libJuicyChain -> JuicyChainAPI : POST_create_batch(data)
+libJuicyChain -> Blocknotify : response(id)
+
+
+== integrity complete ==
+
+Blocknotify -> libJuicyChain : send_integrity_complete_transaction(timestamp_complete_integrity)
+libJuicyChain -> Blockchain : wrapper_sendtoaddress()
+libJuicyChain -> Blocknotify : response(txid)
+Blocknotify -> libJuicyChain : update_integrity_complete(txid)
+libJuicyChain -> libJuicyChain : fire_PUT(url, data)
+libJuicyChain -> ImportAPI : PUT_update_record_with_start_txid(url, data)
+
+
+
+deactivate libJuicyChain
+
+ImportAPI -> Integration: Done
+deactivate Blocknotify
+@enduml
