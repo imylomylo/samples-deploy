@@ -9,7 +9,7 @@ RUN git clone https://github.com/komodoplatform/komodo.git && \
   cd komodo && \
   git checkout master && \
   ./zcutil/build.sh -j4 && \
-  ./zcutil/fetch-params-alt.sh
+  ./zcutil/fetch-params.sh
 
 # from https://rtfm.co.ua/en/docker-configure-tzdata-and-timezone-during-build/
 ENV TZ=Etc/UTC
